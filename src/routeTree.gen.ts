@@ -13,7 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
+import { Route as AuthenticatedCompanyPrepRouteImport } from './routes/_authenticated/company-prep'
+import { Route as AuthenticatedDailyRouteImport } from './routes/_authenticated/daily'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedInterviewsRouteImport } from './routes/_authenticated/interviews'
+import { Route as AuthenticatedNotesRouteImport } from './routes/_authenticated/notes'
 import { Route as AuthenticatedProblemsRouteImport } from './routes/_authenticated/problems'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
@@ -40,9 +45,35 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCompanyPrepRoute =
+  AuthenticatedCompanyPrepRouteImport.update({
+    id: '/company-prep',
+    path: '/company-prep',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDailyRoute = AuthenticatedDailyRouteImport.update({
+  id: '/daily',
+  path: '/daily',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInterviewsRoute = AuthenticatedInterviewsRouteImport.update({
+  id: '/interviews',
+  path: '/interviews',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotesRoute = AuthenticatedNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedProblemsRoute = AuthenticatedProblemsRouteImport.update({
@@ -82,7 +113,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/company-prep': typeof AuthenticatedCompanyPrepRoute
+  '/daily': typeof AuthenticatedDailyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/interviews': typeof AuthenticatedInterviewsRoute
+  '/notes': typeof AuthenticatedNotesRoute
   '/problems': typeof AuthenticatedProblemsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRoute
@@ -94,7 +130,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/company-prep': typeof AuthenticatedCompanyPrepRoute
+  '/daily': typeof AuthenticatedDailyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/interviews': typeof AuthenticatedInterviewsRoute
+  '/notes': typeof AuthenticatedNotesRoute
   '/problems': typeof AuthenticatedProblemsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRoute
@@ -108,7 +149,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
+  '/_authenticated/company-prep': typeof AuthenticatedCompanyPrepRoute
+  '/_authenticated/daily': typeof AuthenticatedDailyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/interviews': typeof AuthenticatedInterviewsRoute
+  '/_authenticated/notes': typeof AuthenticatedNotesRoute
   '/_authenticated/problems': typeof AuthenticatedProblemsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRoute
@@ -122,7 +168,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/analytics'
+    | '/company-prep'
+    | '/daily'
     | '/dashboard'
+    | '/interviews'
+    | '/notes'
     | '/problems'
     | '/settings'
     | '/learn/$slug'
@@ -134,7 +185,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/analytics'
+    | '/company-prep'
+    | '/daily'
     | '/dashboard'
+    | '/interviews'
+    | '/notes'
     | '/problems'
     | '/settings'
     | '/learn/$slug'
@@ -147,7 +203,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/reset-password'
+    | '/_authenticated/analytics'
+    | '/_authenticated/company-prep'
+    | '/_authenticated/daily'
     | '/_authenticated/dashboard'
+    | '/_authenticated/interviews'
+    | '/_authenticated/notes'
     | '/_authenticated/problems'
     | '/_authenticated/settings'
     | '/_authenticated/learn/$slug'
@@ -193,11 +254,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/company-prep': {
+      id: '/_authenticated/company-prep'
+      path: '/company-prep'
+      fullPath: '/company-prep'
+      preLoaderRoute: typeof AuthenticatedCompanyPrepRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/daily': {
+      id: '/_authenticated/daily'
+      path: '/daily'
+      fullPath: '/daily'
+      preLoaderRoute: typeof AuthenticatedDailyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/interviews': {
+      id: '/_authenticated/interviews'
+      path: '/interviews'
+      fullPath: '/interviews'
+      preLoaderRoute: typeof AuthenticatedInterviewsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notes': {
+      id: '/_authenticated/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof AuthenticatedNotesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/problems': {
@@ -246,7 +342,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
+  AuthenticatedCompanyPrepRoute: typeof AuthenticatedCompanyPrepRoute
+  AuthenticatedDailyRoute: typeof AuthenticatedDailyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedInterviewsRoute: typeof AuthenticatedInterviewsRoute
+  AuthenticatedNotesRoute: typeof AuthenticatedNotesRoute
   AuthenticatedProblemsRoute: typeof AuthenticatedProblemsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedLearnSlugRoute: typeof AuthenticatedLearnSlugRoute
@@ -256,7 +357,12 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
+  AuthenticatedCompanyPrepRoute: AuthenticatedCompanyPrepRoute,
+  AuthenticatedDailyRoute: AuthenticatedDailyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedInterviewsRoute: AuthenticatedInterviewsRoute,
+  AuthenticatedNotesRoute: AuthenticatedNotesRoute,
   AuthenticatedProblemsRoute: AuthenticatedProblemsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedLearnSlugRoute: AuthenticatedLearnSlugRoute,

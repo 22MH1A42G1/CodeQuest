@@ -11,7 +11,11 @@ import { Label } from "@/components/ui/label";
 import { PageHeader, Panel } from "@/components/app/PageHeader";
 
 export const Route = createFileRoute("/_authenticated/settings")({
-  head: () => ({ meta: [{ title: "Settings – DSA Mastery" }, { name: "description", content: "Update your profile and daily goal." }] }),
+  head: () => ({ meta: [
+    { title: "Settings – DSA Mastery" }, { name: "description", content: "Update your profile and daily goal." },
+    { property: "og:title", content: "Settings – DSA Mastery" }, { property: "og:description", content: "Manage your DSA learning profile and daily goal." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: Settings,
 });
 

@@ -5,7 +5,11 @@ import { recommend } from "@/lib/stats";
 import { PROBLEMS } from "@/content";
 
 export const Route = createFileRoute("/_authenticated/practice/")({
-  head: () => ({ meta: [{ title: "Coding Practice – DSA Mastery" }, { name: "description", content: "Jump into your next recommended problem." }] }),
+  head: () => ({ meta: [
+    { title: "Coding Practice – DSA Mastery" }, { name: "description", content: "Jump into your next recommended problem." },
+    { property: "og:title", content: "Coding Practice – DSA Mastery" }, { property: "og:description", content: "Continue your personalized Python coding practice." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: PracticeIndex,
 });
 

@@ -32,7 +32,7 @@ export const activityQuery = queryOptions({
   queryKey: ["activity"],
   queryFn: async () => {
     const since = new Date(Date.now() - 120 * 86400000).toISOString().slice(0, 10);
-    const { data, error } = await supabase.from("user_activity").select("activity_date,submissions,problems_solved").gte("activity_date", since);
+    const { data, error } = await supabase.from("user_activity").select("activity_date,submissions,problems_solved,minutes").gte("activity_date", since);
     if (error) throw error;
     return data;
   },
@@ -60,6 +60,17 @@ export const problemSubmissionsQuery = (slug: string) =>
       return data;
     },
   });
+
+export const analyticsSubmissionsQuery = queryOptions({
+  queryKey: ["submissions", "analytics"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("submissions").select("problem_slug,status,kind,created_at")
+      .order("created_at", { ascending: false }).limit(2000);
+    if (error) throw error;
+    return data;
+  },
+});
 
 export const topicProgressQuery = queryOptions({
   queryKey: ["topic-progress"],

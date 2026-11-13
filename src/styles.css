@@ -88,6 +88,56 @@
 
 :root {
   --radius: 0.875rem;
+  --background: oklch(0.97 0.012 260);
+  --foreground: oklch(0.22 0.035 265);
+  --card: oklch(0.99 0.006 260);
+  --card-foreground: oklch(0.22 0.035 265);
+  --popover: oklch(0.99 0.006 260);
+  --popover-foreground: oklch(0.22 0.035 265);
+  --primary: oklch(0.56 0.19 255);
+  --primary-foreground: oklch(0.98 0.005 260);
+  --primary-glow: oklch(0.58 0.19 290);
+  --secondary: oklch(0.93 0.025 260);
+  --secondary-foreground: oklch(0.25 0.04 265);
+  --muted: oklch(0.93 0.02 260);
+  --muted-foreground: oklch(0.48 0.035 260);
+  --accent: oklch(0.92 0.035 285);
+  --accent-foreground: oklch(0.25 0.04 265);
+  --destructive: oklch(0.58 0.21 22);
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.52 0.14 160);
+  --success-foreground: oklch(0.98 0.005 260);
+  --warning: oklch(0.62 0.14 70);
+  --warning-foreground: oklch(0.2 0.03 265);
+  --easy: oklch(0.52 0.14 165);
+  --medium: oklch(0.64 0.15 75);
+  --hard: oklch(0.58 0.2 22);
+  --border: oklch(0.86 0.025 260);
+  --input: oklch(0.86 0.025 260);
+  --ring: oklch(0.56 0.19 255);
+  --chart-1: oklch(0.56 0.19 255);
+  --chart-2: oklch(0.58 0.19 290);
+  --chart-3: oklch(0.52 0.14 165);
+  --chart-4: oklch(0.64 0.15 75);
+  --chart-5: oklch(0.58 0.2 22);
+  --sidebar: oklch(0.94 0.02 260);
+  --sidebar-foreground: oklch(0.28 0.035 265);
+  --sidebar-primary: oklch(0.56 0.19 255);
+  --sidebar-primary-foreground: oklch(0.98 0.005 260);
+  --sidebar-accent: oklch(0.89 0.035 260);
+  --sidebar-accent-foreground: oklch(0.23 0.04 265);
+  --sidebar-border: oklch(0.84 0.025 260);
+  --sidebar-ring: oklch(0.56 0.19 255);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --gradient-hero: radial-gradient(ellipse at 20% 0%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 55%), radial-gradient(ellipse at 90% 20%, color-mix(in oklab, var(--primary-glow) 14%, transparent), transparent 50%);
+  --shadow-card: 0 1px 0 0 color-mix(in oklab, var(--foreground) 3%, transparent) inset, 0 10px 30px -20px oklch(0.25 0.04 265 / 0.35);
+  --shadow-glow: 0 10px 40px -14px color-mix(in oklab, var(--primary) 35%, transparent);
+  --note-paper: oklch(0.95 0.04 95);
+  --note-ink: oklch(0.3 0.06 260);
+}
+
+.dark {
+  --radius: 0.875rem;
   /* Deep navy developer theme (dark by default) */
   --background: oklch(0.16 0.03 265);
   --foreground: oklch(0.95 0.01 260);
@@ -163,8 +213,23 @@
   background-size: 22px 22px;
 }
 @layer base {
-  html { color-scheme: dark; }
+  html { color-scheme: light; }
+  html.dark { color-scheme: dark; }
   body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
   h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
   code, pre, kbd { font-family: var(--font-mono); }
+}
+
+.print-notes { display: none; }
+@page { size: A4; margin: 14mm; }
+@media print {
+  html, body { background: var(--background); color: var(--foreground); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  aside, header, .notes-screen, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+  .print-notes { display: block; font-family: var(--font-sans); }
+  .print-notes > h1 { font-size: 24pt; }
+  .print-note { break-inside: avoid; margin-top: 8mm; border-top: 1px solid var(--border); padding-top: 4mm; }
+  .print-note h2 { font-size: 16pt; }
+  .print-note > p { color: var(--muted-foreground); font-size: 9pt; }
+  .print-note > div { margin-top: 3mm; white-space: pre-wrap; font-size: 10pt; line-height: 1.6; }
 }

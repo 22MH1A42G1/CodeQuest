@@ -17,7 +17,11 @@ export const Route = createFileRoute("/_authenticated/learn/$slug")({
     if (!topic) throw notFound();
     return { topic };
   },
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.topic.title ?? "Topic"} – Learn DSA` }, { name: "description", content: loaderData?.topic.summary ?? "DSA topic" }] }),
+  head: ({ loaderData }) => ({ meta: [
+    { title: `${loaderData?.topic.title ?? "Topic"} – Learn DSA` }, { name: "description", content: loaderData?.topic.summary ?? "DSA topic" },
+    { property: "og:title", content: `${loaderData?.topic.title ?? "Topic"} – Learn DSA` }, { property: "og:description", content: loaderData?.topic.summary ?? "DSA lesson and quiz" },
+    { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: TopicPage,
 });
 

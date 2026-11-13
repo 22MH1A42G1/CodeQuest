@@ -4,7 +4,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { toast } from "sonner";
-import { ArrowLeft, Bookmark, CheckCircle2, ChevronLeft, ChevronRight, Lightbulb, Loader2, Play, Plus, RotateCcw, Send, X, XCircle } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkPlus, CheckCircle2, ChevronLeft, ChevronRight, Lightbulb, Loader2, Play, Plus, RotateCcw, Send, X, XCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useTheme } from "@/hooks/use-theme";
 import { PROBLEMS, problemBySlug, topicTitle } from "@/content";
 import { problemSubmissionsQuery, progressQuery } from "@/lib/queries";
 import { runCode, submitCode, toggleRevision } from "@/lib/judge.functions";
@@ -22,7 +24,11 @@ export const Route = createFileRoute("/_authenticated/practice/$slug")({
     if (!problem) throw notFound();
     return { problem };
   },
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.problem.title ?? "Problem"} – Coding Practice` }, { name: "description", content: "Solve this problem in Python and test it." }] }),
+  head: ({ loaderData }) => ({ meta: [
+    { title: `${loaderData?.problem.title ?? "Problem"} – Coding Practice` }, { name: "description", content: "Solve this problem in Python and test it." },
+    { property: "og:title", content: `${loaderData?.problem.title ?? "Problem"} – Coding Practice` }, { property: "og:description", content: "Python practice with sample and hidden test cases." },
+    { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: Arena,
 });
 
@@ -34,6 +40,7 @@ function Arena() {
   const { problem } = Route.useLoaderData();
   const qc = useQueryClient();
   const isMobile = useIsMobile();
+  const { theme } = useTheme();
   const draftKey = `dsa-draft:${problem.slug}`;
   const [code, setCode] = useState(problem.starterCode);
   const [custom, setCustom] = useState<string[]>([]);
@@ -97,6 +104,17 @@ function Arena() {
   const revM = useMutation({
     mutationFn: (marked: boolean) => revFn({ data: { slug: problem.slug, marked } }),
     onSuccess: (r) => { toast.success(r.marked ? "Marked for revision" : "Removed from revision"); refresh(); },
+    onError: (e) => toast.error(e.message),
+  });
+  const bookmarkM = useMutation({
+    mutationFn: async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) throw new Error("Not signed in");
+      if (!code.trim() || code === problem.starterCode) throw new Error("Write a solution before bookmarking it");
+      const { error } = await supabase.from("bookmarks").insert({ user_id: data.user.id, problem_slug: problem.slug, title: problem.title, code_snippet: code });
+      if (error) throw error;
+    },
+    onSuccess: () => toast.success("Solution saved in My Notes"),
     onError: (e) => toast.error(e.message),
   });
 
@@ -222,7 +240,7 @@ function Arena() {
           />
         ) : <Editor
           language="python"
-          theme="vs-dark"
+          theme={theme === "dark" ? "vs-dark" : "light"}
           value={code}
           onChange={(v) => setCode(v ?? "")}
           options={{ fontSize: 14, fontFamily: "JetBrains Mono, monospace", minimap: { enabled: false }, scrollBeyondLastLine: false, tabSize: 4, automaticLayout: true, padding: { top: 12 } }}
@@ -258,7 +276,10 @@ function Arena() {
           {prev && <Button variant="ghost" size="icon" asChild><Link to="/practice/$slug" params={{ slug: prev.slug }} aria-label="Previous problem"><ChevronLeft /></Link></Button>}
           {next && <Button variant="ghost" size="icon" asChild><Link to="/practice/$slug" params={{ slug: next.slug }} aria-label="Next problem"><ChevronRight /></Link></Button>}
         </div>
-        <Button variant="ghost" size="sm" className="ml-auto" onClick={() => revM.mutate(!mine?.marked_for_revision)} disabled={revM.isPending}>
+        <Button variant="ghost" size="sm" className="ml-auto" onClick={() => bookmarkM.mutate()} disabled={bookmarkM.isPending} aria-label="Bookmark solution">
+          <BookmarkPlus /> <span className="hidden xl:inline">Save code</span>
+        </Button>
+        <Button variant="ghost" size="sm" onClick={() => revM.mutate(!mine?.marked_for_revision)} disabled={revM.isPending}>
           <Bookmark className={cn(mine?.marked_for_revision && "fill-warning text-warning")} /> <span className="hidden sm:inline">{mine?.marked_for_revision ? "In revision list" : "Revise later"}</span>
         </Button>
         <div className="flex rounded-lg bg-muted p-0.5 lg:hidden">

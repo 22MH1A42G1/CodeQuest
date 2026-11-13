@@ -18,6 +18,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in or create your DSA Mastery account to save your coding progress." },
       { property: "og:title", content: "Sign in – DSA Mastery" },
       { property: "og:description", content: "Sign in to track your DSA practice and interview prep." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,

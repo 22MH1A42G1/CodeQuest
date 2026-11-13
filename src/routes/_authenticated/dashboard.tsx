@@ -13,7 +13,11 @@ import { PageHeader, Panel } from "@/components/app/PageHeader";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard – DSA Mastery" }, { name: "description", content: "Your coding streak, solved problems and next steps." }] }),
+  head: () => ({ meta: [
+    { title: "Dashboard – DSA Mastery" }, { name: "description", content: "Your coding streak, solved problems and next steps." },
+    { property: "og:title", content: "Dashboard – DSA Mastery" }, { property: "og:description", content: "Personal coding progress, activity and recommendations." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: Dashboard,
 });
 

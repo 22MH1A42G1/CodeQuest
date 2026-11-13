@@ -157,8 +157,11 @@ export const submitCode = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const problem = problemBySlug(data.slug);
     if (!problem) throw new Error("Problem not found");
-    const { HIDDEN_TESTS } = await import("@/server/hidden-tests.server");
-    const tests: TestCase[] = [...problem.samples, ...(HIDDEN_TESTS[problem.slug] ?? [])];
+    const [{ HIDDEN_TESTS }, { EXTRA_HIDDEN_TESTS }] = await Promise.all([
+      import("@/server/hidden-tests.server"),
+      import("@/server/extra-hidden-tests.server"),
+    ]);
+    const tests: TestCase[] = [...problem.samples, ...(HIDDEN_TESTS[problem.slug] ?? EXTRA_HIDDEN_TESTS[problem.slug] ?? [])];
     try {
       const exec = await execute(buildProgram(problem, data.code, tests.map((t) => t.input)), data.clientExec);
       const { results } = parseProgramOutput(exec.stdout);
@@ -189,6 +192,19 @@ export const submitCode = createServerFn({ method: "POST" })
         { onConflict: "user_id,problem_slug" },
       );
       await recordActivity(context.userId, solvedNew);
+
+      if (accepted) {
+        const { getDailyChallenges, challengeDate } = await import("@/content/daily");
+        const challenge = getDailyChallenges().find((c) => c.problem.slug === problem.slug);
+        if (challenge) {
+          await supabaseAdmin.from("daily_challenge_completions").upsert({
+            user_id: context.userId,
+            challenge_date: challengeDate(),
+            problem_slug: problem.slug,
+            points: challenge.points,
+          }, { onConflict: "user_id,challenge_date,problem_slug", ignoreDuplicates: true });
+        }
+      }
 
       const firstFail = graded.findIndex((g) => !g.passed);
       const sampleCount = problem.samples.length;
@@ -226,5 +242,12 @@ export const toggleRevision = createServerFn({ method: "POST" })
       .from("user_progress").select("id").eq("user_id", context.userId).eq("problem_slug", data.slug).maybeSingle();
     if (prog) await supabaseAdmin.from("user_progress").update({ marked_for_revision: data.marked }).eq("id", prog.id);
     else await supabaseAdmin.from("user_progress").insert({ user_id: context.userId, problem_slug: data.slug, marked_for_revision: data.marked });
+    if (data.marked) {
+      const due = new Date(); due.setUTCDate(due.getUTCDate() + 1);
+      const { data: existing } = await supabaseAdmin.from("revision_reminders").select("id").eq("user_id", context.userId).eq("problem_slug", data.slug).is("completed_at", null).maybeSingle();
+      if (!existing) await supabaseAdmin.from("revision_reminders").insert({ user_id: context.userId, problem_slug: data.slug, due_on: due.toISOString().slice(0, 10) });
+    } else {
+      await supabaseAdmin.from("revision_reminders").delete().eq("user_id", context.userId).eq("problem_slug", data.slug);
+    }
     return { marked: data.marked };
   });

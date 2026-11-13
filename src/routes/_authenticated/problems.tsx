@@ -10,7 +10,11 @@ import { DifficultyBadge } from "@/components/app/DifficultyBadge";
 import { PageHeader } from "@/components/app/PageHeader";
 
 export const Route = createFileRoute("/_authenticated/problems")({
-  head: () => ({ meta: [{ title: "Problem Bank – DSA Mastery" }, { name: "description", content: "Search Python coding problems by topic and difficulty." }] }),
+  head: () => ({ meta: [
+    { title: "Problem Bank – DSA Mastery" }, { name: "description", content: "Search Python coding problems by topic and difficulty." },
+    { property: "og:title", content: "Problem Bank – DSA Mastery" }, { property: "og:description", content: "Browse 300 tested Python problems, including Hard challenges." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: ProblemBank,
 });
 

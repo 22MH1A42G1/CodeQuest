@@ -10,7 +10,11 @@ import { PageHeader } from "@/components/app/PageHeader";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/learn/")({
-  head: () => ({ meta: [{ title: "Learn DSA – DSA Mastery" }, { name: "description", content: "A structured path through 22 DSA topics in Python." }] }),
+  head: () => ({ meta: [
+    { title: "Learn DSA – DSA Mastery" }, { name: "description", content: "A structured path through 22 DSA topics in Python." },
+    { property: "og:title", content: "Learn DSA – DSA Mastery" }, { property: "og:description", content: "Structured Python DSA lessons, notes and quizzes." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: LearnIndex,
 });
 
