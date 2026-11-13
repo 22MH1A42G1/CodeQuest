@@ -1,9 +1,12 @@
 # DSA Mastery roadmap
 - [x] Phase 1: landing, auth (email, Google, reset), dashboard, database
-- [x] Phase 2: 22 learning topics with quizzes; problem bank (57 problems so far)
+- [x] Phase 2: 22 learning topics with quizzes; problem bank expanded to 300 problems
 - [x] Phase 3: Monaco arena + server-side Python judge (Judge0) — needs JUDGE0_API_KEY
 - [x] Fix build errors
-- [ ] Expand problem bank toward 300 problems
-- [ ] Phase 4: analytics page, notes & revision center (PDF export, flashcards)
-- [ ] Phase 5: AI mock interviews, company prep, daily challenges + leaderboard
-- [ ] Optional light theme
+- [x] Expand problem bank to 300 working problems (58 Easy, 179 Medium, 63 Hard), with sample and hidden tests
+- [x] Phase 4: analytics page with performance metrics and recommendations
+- [x] Phase 4: notes & revision center with PDF export, bookmarks, flashcards and reminders
+- [x] Phase 5: AI mock interviews with attempt-first feedback and scoring
+- [x] Phase 5: company preparation with clearly labelled practice material
+- [x] Phase 5: daily challenges, points, badges, revision history and weekly leaderboard
+- [x] Optional light theme with persistent preference

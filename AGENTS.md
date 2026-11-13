@@ -31,5 +31,6 @@ use the editor.
 
 ## DSA Mastery architecture
 - Lesson and problem content lives in generated TS (`src/content/*`); the DB holds only slug catalogs (`dsa_topics`, `coding_problems`) for foreign keys plus user data. Why: keeps rich content versioned and the migration small.
-- Hidden test cases live only in `src/server/hidden-tests.server.ts` and are imported inside server-fn handlers; never return hidden inputs/expected values to the client.
+- Hidden test cases live only in `src/server/hidden-tests.server.ts` and `src/server/extra-hidden-tests.server.ts`, imported inside server-fn handlers; never return hidden inputs/expected values to the client.
+- AI mock interviews use streamed Lovable AI Responses calls in `src/server/interview-ai.server.ts`, with plain transcripts and scores persisted in `mock_interviews`; prompts, provider keys and evaluation schemas stay server-side, and ideal solutions are requested only after an attempt.
 - Code runs through Judge0 from `src/lib/judge.functions.ts` when `JUDGE0_API_KEY`/`JUDGE0_URL` is set; otherwise the server returns the built program, the browser runs it with Pyodide (`src/lib/browser-python.ts`) and posts stdout back, and grading still happens on the server. Why: works with no paid key; tradeoff is hidden inputs reach the client and results are forgeable until Judge0 is configured.
