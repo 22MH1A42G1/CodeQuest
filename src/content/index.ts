@@ -1,7 +1,9 @@
-import { PROBLEMS } from "./problems";
+import { PROBLEMS as CORE_PROBLEMS } from "./problems";
+import { EXTRA_PROBLEMS } from "./extra-problems";
 import { TOPICS } from "./topics";
 
-export { PROBLEMS, TOPICS };
+export const PROBLEMS = [...CORE_PROBLEMS, ...EXTRA_PROBLEMS];
+export { TOPICS };
 export * from "./types";
 
 export const problemBySlug = (slug: string) => PROBLEMS.find((p) => p.slug === slug);
